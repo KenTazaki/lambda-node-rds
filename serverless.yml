@@ -92,6 +92,14 @@ functions:
           method: put
           cors: true
 
+  deleteUser:
+    handler: handler.deleteUser
+    events:
+      - http:
+          path: users/{id}
+          method: delete
+          cors: true
+
 plugins:
   - serverless-offline
 #    The following are a few example events you can configure
