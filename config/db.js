@@ -1,7 +1,9 @@
+require("dotenv").config();
+
 module.exports = {
-  host: '127.0.0.1',
-  port: '3306',
-  user: 'root',
-  password: '',
-  database: 'rds_proxy_test'
-}
+  host: process.env.DATABASE_ENDPOINT,
+  port: process.env.DATABASE_PORT,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME
+};
