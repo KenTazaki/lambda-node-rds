@@ -5,6 +5,7 @@ const db_data = require("./config/db");
 
 module.exports.getUser = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
+  let connection;
   try {
     let connection = await mysql.createConnection(db_data);
     const [result] = await connection.query(
@@ -31,6 +32,7 @@ module.exports.getUser = async (event, context, callback) => {
 
 module.exports.getAllUsers = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
+  let connection;
   try {
     let connection = await mysql.createConnection(db_data);
     const [result] = await connection.query("SELECT * FROM users");
@@ -48,6 +50,40 @@ module.exports.getAllUsers = async (event, context, callback) => {
       body: "Could not find Users: " + err
     });
   } finally {
+    connection.end();
+  }
+};
+
+module.exports.createUser = async (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  let connection;
+  try {
+    connection = await mysql.createConnection(db_data);
+
+    const object = JSON.parse(event.body);
+    const keys = Object.keys(object);
+    const values = keys.map(key => object[key]);
+    const cols = keys.join(", ");
+    const placeholders = values.map((v, index) => "?").join(", ");
+    const sql = `INSERT into users(${cols}) values(${placeholders})`;
+
+    await connection.query(sql, ...values);
+    const [result] = await connection.query(
+      "SELECT * FROM users WHERE id = LAST_INSERT_ID()"
+    );
+    connection.end();
+    callback(null, {
+      statusCode: 200,
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(result[0])
+    });
+  } catch (err) {
+    connection.end();
+    callback(null, {
+      statusCode: err.statusCode || 500,
+      headers: { "Content-type": "application/json" },
+      body: "Could not create Users: " + err
+    });
     connection.end();
   }
 };
