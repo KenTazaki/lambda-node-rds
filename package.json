@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/KenTazaki/lambda-node-rds#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "mysql2": "^2.1.0"
   },
   "devDependencies": {
