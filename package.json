@@ -1,0 +1,26 @@
+{
+  "name": "rdsProxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KenTazaki/lambda-node-rds.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KenTazaki/lambda-node-rds/issues"
+  },
+  "homepage": "https://github.com/KenTazaki/lambda-node-rds#readme",
+  "dependencies": {
+    "mysql2": "^2.1.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^6.0.0-alpha.67"
+  }
+}
