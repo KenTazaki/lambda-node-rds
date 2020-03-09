@@ -1,18 +1,30 @@
-'use strict';
+"use strict";
 
-module.exports.hello = async event => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const mysql = require("mysql2/promise");
+const db_data = require("./config/db");
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+module.exports.getUser = async (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  try {
+    let connection = await mysql.createConnection(db_data);
+    const [result] = await connection.query(
+      "SELECT * FROM users WHERE id = ?",
+      event.pathParameters.id
+    );
+    connection.end();
+    callback(null, {
+      statusCode: 200,
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(result)
+    });
+  } catch (err) {
+    connection.end();
+    callback(null, {
+      statusCode: err.statusCode || 500,
+      headers: { "Content-type": "application/json" },
+      body: "Could not find User: " + err
+    });
+  } finally {
+    connection.end();
+  }
 };
