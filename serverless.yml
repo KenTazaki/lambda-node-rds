@@ -25,6 +25,27 @@ provider:
   runtime: nodejs12.x
   profile: serverless_omochi
   region: ap-northeast-1
+  stage: ${opt:stage, self:custom.defaultStage}
+  environment:
+    DATABASE_ENDPOINT: ${self:custom.otherfile.environment.${self:provider.stage}.db.endpoint}
+    DATABASE_PORT: ${self:custom.otherfile.environment.${self:provider.stage}.db.port}
+    DATABASE_USER: ${self:custom.otherfile.environment.${self:provider.stage}.db.user}
+    DATABASE_PASSWORD: ${self:custom.otherfile.environment.${self:provider.stage}.db.password}
+    DATABASE_NAME: ${self:custom.otherfile.environment.${self:provider.stage}.db.name}
+  vpc:
+    securityGroupIds: ${self:custom.otherfile.environment.${self:provider.stage}.vpc.securityGroupIds}
+    subnetIds: ${self:custom.otherfile.environment.${self:provider.stage}.vpc.subnetIds}
+
+custom:
+  defaultStage: dev
+  otherfile:
+    environment:
+      dev: ${file(./config/dev/dev.yml)}
+      prd: ${file(./config/prd/prd.yml)}
+
+iamRoleStatements:
+  - Effect: "Allow"
+    Action:
 
 # you can overwrite defaults here
 #  stage: dev
