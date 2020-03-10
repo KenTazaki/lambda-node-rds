@@ -64,10 +64,10 @@ module.exports.createUser = async (event, context, callback) => {
     const keys = Object.keys(object);
     const values = keys.map(key => object[key]);
     const cols = keys.join(", ");
-    const placeholders = values.map((v, index) => "?").join(", ");
+    const placeholders = values.map(_v => "?").join(", ");
     const sql = `INSERT into users(${cols}) values(${placeholders})`;
 
-    await connection.query(sql, ...values);
+    await connection.query(sql, values);
     const [result] = await connection.query(
       "SELECT * FROM users WHERE id = LAST_INSERT_ID()"
     );
