@@ -7,5 +7,6 @@ jspm_packages
 
 # env file
 .env
+local.yml
 dev.yml
 prd.yml
