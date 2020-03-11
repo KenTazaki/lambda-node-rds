@@ -4,6 +4,7 @@ const mysql = require("mysql2/promise");
 const db_data = require("./config/db");
 
 const getFunc = require("./lib/get");
+const getAllFunc = require("./lib/getAll");
 
 module.exports.getUser = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -13,26 +14,8 @@ module.exports.getUser = async (event, context, callback) => {
 
 module.exports.getAllUsers = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  let connection;
-  try {
-    connection = await mysql.createConnection(db_data);
-    const [result] = await connection.query("SELECT * FROM users");
-    connection.end();
-    callback(null, {
-      statusCode: 200,
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(result)
-    });
-  } catch (err) {
-    connection.end();
-    callback(null, {
-      statusCode: err.statusCode || 500,
-      headers: { "Content-type": "application/json" },
-      body: "Could not find Users: " + err
-    });
-  } finally {
-    connection.end();
-  }
+  const response = await getAllFunc(event, "users");
+  callback(null, response);
 };
 
 module.exports.createUser = async (event, context, callback) => {
