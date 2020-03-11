@@ -1,6 +1,8 @@
 "use strict";
 
 const getFunc = require("./lib/get");
+const getAllFunc = require("./lib/getAll");
+const createFunc = require("./lib/create");
 const updateFunc = require("./lib/update");
 const deleteFunc = require("./lib/delete");
 
