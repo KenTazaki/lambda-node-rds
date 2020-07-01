@@ -1,0 +1,13 @@
+db:
+  endpoint: 
+  port: 3306
+  user: 
+  password: 
+  name: 
+
+vpc:
+  securityGroupIds:
+    - sg-
+  subnetIds:
+    - subnet-
+    - subnet-
